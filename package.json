@@ -1,0 +1,31 @@
+{
+  "name": "radicula-workshop-sluck-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Frontend for Radicula's Sluck workshop - a simple chatting interface",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jurca/radicula-workshop-sluck-frontend.git"
+  },
+  "keywords": [
+    "radicula",
+    "chat",
+    "frontend",
+    "app"
+  ],
+  "author": "Martin Jurča <mjurca@centrum.cz>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jurca/radicula-workshop-sluck-frontend/issues"
+  },
+  "homepage": "https://github.com/jurca/radicula-workshop-sluck-frontend#readme",
+  "dependencies": {
+    "bootstrap": "^4.1.3",
+    "jquery": "^3.3.1",
+    "popper.js": "^1.14.6"
+  }
+}
