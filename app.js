@@ -8,6 +8,20 @@ $(() => {
         submit: $('#submit'),
         username: $('#username'),
     }
+    const mockMessageStorage = [
+        {
+            id: "mock:0",
+            created_at: 1544205826,
+            username: "HelixSnail",
+            message: "This is a mock message",
+        },
+        {
+            id: "mock:1",
+            created_at: 1544206365,
+            username: "Placeholder text",
+            message: "Lorem ipsum dolor sit ament venurum al iglo enet vuradum.",
+        },
+    ]
     let newestMessageId = null
 
     ui.username.val(getUsername())
@@ -38,22 +52,32 @@ $(() => {
         updateMessages.lock = true
         try {
             const messages = await fetchMessages()
-            renderMessages(messages).appendTo(ui.messages)
+            if (messages.length) {
+                const rescroll =
+                    ui.messages.scrollTop() === ui.messages.prop('scrollHeight') - ui.messages.prop('offsetHeight')
+                for (const message of renderMessages(messages)) {
+                    $(message).appendTo(ui.messages)
+                }
+                newestMessageId = messages[messages.length - 1].id
+                if (rescroll) {
+                    ui.messages.scrollTop(ui.messages.prop('scrollHeight'))
+                }
+            }
         } finally {
             updateMessages.lock = false
         }
     }
 
     function renderMessages(messages) {
-        return $(messages).map((_, message) => renderMessage(message))
+        return messages.map(message => renderMessage(message))
     }
 
     function renderMessage(message) {
         return $('<div class="py-2">').append([
-            $('<div class="pb-1 text-muted">').text(moment.unix(message.created_at).format('Do Mo HH:mm:ss')),
+            $('<div class="text-muted">').text(moment.unix(message.created_at).format('Do Mo HH:mm:ss')),
             $('<div class="d-flex">').append([
-                $('<span class="font-weight-bold pr-4">').text(`${message.username}:`),
-                $('<span class="flex-grow-1">').text(message),
+                $('<span class="font-weight-bold pr-2">').text(`${message.username}:`),
+                $('<span class="flex-grow-1">').text(message.message),
             ]),
         ])
     }
@@ -70,6 +94,9 @@ $(() => {
         await sendMessage(ui.username.val(), ui.message.val())
         ui.message.val('')
         ui.message.add(ui.submit).removeAttr('disabled')
+        ui.message.focus()
+
+        updateMessages()
     }
 
     function getUsername() {
@@ -96,6 +123,14 @@ $(() => {
     }
 
     async function fetchMessages() {
+        if (window.API_MOCK) {
+            await new Promise(resolve => setTimeout(resolve, 150))
+            if (!newestMessageId) {
+                return mockMessageStorage;
+            }
+            return mockMessageStorage.slice(parseInt(newestMessageId.substring(5)) + 1)
+        }
+
         const query = newestMessageId ?
             {
                 after: newestMessageId,
@@ -112,6 +147,18 @@ $(() => {
     }
 
     async function sendMessage(username, message) {
+        if (window.API_MOCK) {
+            await new Promise(resolve => setTimeout(resolve, 225))
+            const messageRecord = {
+                id: `mock:${mockMessageStorage.length}`,
+                created_at: Math.floor(Date.now()),
+                username,
+                message,
+            }
+            mockMessageStorage.push(messageRecord)
+            return messageRecord
+        }
+
         const response = await fetch(`${API_BASE_URL}/messages`, {
             method: 'POST',
             headers: {},

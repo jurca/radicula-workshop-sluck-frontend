@@ -13,6 +13,7 @@
         <link rel="stylesheet" href="style.css">
         <script>
             window.API_BASE_URL = 'http://localhost:8800'
+            window.API_MOCK = true
             moment.locale('cs')
         </script>
         <script src="app.js" async></script>
@@ -20,7 +21,7 @@
     <body class="h-100 bg-dark">
         <div class="container d-flex h-100 flex-column bg-light">
             <div id="messages" class="flex-grow-1 pt-2"></div>
-            <div class="input-group py-2">
+            <div class="input-group flex-shrink-0 py-2">
                 <div class="input-grop-prepend">
                     <input
                         id="username"
