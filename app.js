@@ -50,7 +50,7 @@ $(() => {
 
     function renderMessage(message) {
         return $('<div class="py-2">').append([
-            $('<div class="pb-1 text-muted">').text(message.created_at), // unix timestamp, format using moment.js
+            $('<div class="pb-1 text-muted">').text(moment.unix(message.created_at).format('Do Mo HH:mm:ss')),
             $('<div class="d-flex">').append([
                 $('<span class="font-weight-bold pr-4">').text(`${message.username}:`),
                 $('<span class="flex-grow-1">').text(message),
