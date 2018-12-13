@@ -12,9 +12,9 @@
 
         <link rel="stylesheet" href="style.css">
         <script>
-            window.API_BASE_URL = 'http://localhost:8800'
-            window.API_MOCK = true
-            moment.locale('cs')
+            window.API_BASE_URL = '<!--#echo var="API_BASE_URL" -->'
+            window.API_MOCK = <!--#echo var="API_MOCK" -->
+            moment.locale('<!--#echo var="LOCALE" -->')
         </script>
         <script src="app.js" async></script>
     </head>
